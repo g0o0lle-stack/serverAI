@@ -5,20 +5,21 @@ require('dotenv').config();
 const { GoogleGenAI } = require('@google/genai');
 const { initializeApp, cert } = require('firebase-admin/app');
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
-const privateKey = process.env.FIREBASE_PRIVATE_KEY 
-  ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') 
-  : undefined;
-  
+
 // Detectar si tenemos el JSON local o si usamos variables de entorno (Render)
 let credentialConfig;
 try {
   const serviceAccount = require('./firebase-key.json');
   credentialConfig = cert(serviceAccount);
 } catch (e) {
+  // Limpiamos posibles comillas y convertimos los \n en saltos de línea reales de forma segura
+  let rawKey = process.env.FIREBASE_PRIVATE_KEY || '';
+  rawKey = rawKey.replace(/^["']|["']$/g, '').replace(/\\n/g, '\n');
+
   credentialConfig = cert({
     projectId: process.env.FIREBASE_PROJECT_ID,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') : undefined
+    privateKey: rawKey
   });
 }
 
@@ -74,7 +75,7 @@ app.post('/api/chat', async (req, res) => {
 
         // 4. Enviar todo a Gemini
         const response = await ai.models.generateContent({
-            model: 'gemini-3.6-flash',
+            model: 'gemini-2.5-flash',
             contents: contents,
         });
 
