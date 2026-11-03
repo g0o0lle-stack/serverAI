@@ -5,7 +5,10 @@ require('dotenv').config();
 const { GoogleGenAI } = require('@google/genai');
 const { initializeApp, cert } = require('firebase-admin/app');
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
-
+const privateKey = process.env.FIREBASE_PRIVATE_KEY 
+  ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') 
+  : undefined;
+  
 // Detectar si tenemos el JSON local o si usamos variables de entorno (Render)
 let credentialConfig;
 try {
