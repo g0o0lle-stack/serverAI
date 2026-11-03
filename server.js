@@ -32,13 +32,16 @@ const db = getFirestore();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Servir la carpeta public como archivos estáticos
+app.use(express.static('public'));
 app.use(cors());
 app.use(express.json());
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const path = require('path');
 
 app.get('/', (req, res) => {
-    res.send('¡Servidor con Firebase, Memoria y Gemini funcionando!');
+    res.send(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.post('/api/chat', async (req, res) => {
