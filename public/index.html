@@ -135,7 +135,7 @@
 
             try {
                 // 2. Enviar petición al backend de Node.js
-                const response = await fetch('http://localhost:3000/api/chat', {
+                const response = await fetch('https://serverai-agq7.onrender.com', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId: userId, message: text })
