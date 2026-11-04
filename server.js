@@ -78,7 +78,7 @@ Asistente:`;
 
         // 4. Llamar a la API de Gemini
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-3.6-flash',
             contents: prompt,
         });
 
